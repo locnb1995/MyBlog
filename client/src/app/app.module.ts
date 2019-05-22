@@ -10,8 +10,10 @@ import { ManagerComponent } from './manager/manager.component';
 import { MainpageComponent } from './mainpage/mainpage.component';
 import { DetailComponent } from './detail/detail.component';
 import { ConfigService } from './ConfigService';
+import { LoginService } from '../app/login/login.service';
 import { HttpModule } from '@angular/http';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,8 +30,9 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
     BrowserModule,
     AppRoutingModule,
     HttpModule,
+    FormsModule,
   ],
-  providers: [ConfigService],
+  providers: [ConfigService , LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

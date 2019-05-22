@@ -17,9 +17,9 @@ export class MainpageComponent implements OnInit {
 
   urlConfig = this.configService.url;
   listPost;
-  viewDetail(post_id) {
-    this.mainpageService.viewDetailPost(this.urlConfig, post_id).subscribe((data) => { console.log(data)});
-    const detailUrl = 'detail/' + post_id;
+  viewDetail(postId) {
+    this.mainpageService.viewDetailPost(this.urlConfig, postId).subscribe((data) => {});
+    const detailUrl = 'detail/' + postId;
     this.router.navigate([detailUrl]);
   }
 

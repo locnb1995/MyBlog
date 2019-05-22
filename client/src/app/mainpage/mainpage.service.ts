@@ -17,9 +17,10 @@ export class MainPageService {
         const options = new RequestOptions({
             headers: headers
         });
-        const body = JSON.stringify('{}');
+        const a = [];
+        const body = JSON.stringify({});
         return this.http.put(url, body, options)
-            .pipe(map(res => res.json()));
+            .pipe(map(res => res.json));
     }
 
 }

@@ -1,5 +1,6 @@
 package baoloc.hus.server.controller;
 
+import baoloc.hus.server.entity.Member;
 import baoloc.hus.server.entity.Post;
 import baoloc.hus.server.responsitory.MemberResponsitory;
 import baoloc.hus.server.responsitory.PostResponsitory;
@@ -10,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -19,6 +22,8 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -37,6 +42,7 @@ public class MainController {
     
     @Autowired
     private EntityManager entityManager;
+    
     
     private Sort orderByIdDesc() {
     	return new Sort(Sort.Direction.DESC, "id");
@@ -80,6 +86,29 @@ public class MainController {
     	Post post_updated = post.get();
     	post_updated.setView_total(post_updated.getView_total() + 1);
     	postResponsitory.save(post_updated);
+    }
+    
+    @GetMapping("/checkLoginStatus")
+    public ArrayList<Boolean> checkLoginStatus(HttpSession session){
+    	ArrayList<Boolean> checkLogin = new ArrayList<Boolean>();
+    	if(session.getAttribute("user") == null) {
+    		checkLogin.add(false);
+    		return checkLogin;
+    	}
+    	checkLogin.add(true);
+		return checkLogin;
+    }
+    
+    @PostMapping("/MemberInfo")
+    public List<Member> checkMemberExist(@RequestBody Member member , HttpSession session){
+    	String sql = "SELECT * FROM members WHERE username = '"+member.getUsername()+"' AND password='"+member.getPassword()+"'";
+        Query query = entityManager.createNativeQuery(sql);
+        @SuppressWarnings("unchecked")
+		List<Member> resultList = query.getResultList();
+        if(!resultList.isEmpty()) {
+        	session.setAttribute("user", resultList.get(0));
+        }
+        return resultList;
     }
     
 }
