@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -42,7 +41,6 @@ public class MainController {
     
     @Autowired
     private EntityManager entityManager;
-    
     
     private Sort orderByIdDesc() {
     	return new Sort(Sort.Direction.DESC, "id");
@@ -91,11 +89,11 @@ public class MainController {
     @GetMapping("/checkLoginStatus")
     public ArrayList<Boolean> checkLoginStatus(HttpSession session){
     	ArrayList<Boolean> checkLogin = new ArrayList<Boolean>();
+    	checkLogin.add(false);
     	if(session.getAttribute("user") == null) {
-    		checkLogin.add(false);
     		return checkLogin;
     	}
-    	checkLogin.add(true);
+    	checkLogin.set(0, true);
 		return checkLogin;
     }
     
@@ -106,7 +104,7 @@ public class MainController {
         @SuppressWarnings("unchecked")
 		List<Member> resultList = query.getResultList();
         if(!resultList.isEmpty()) {
-        	session.setAttribute("user", resultList.get(0));
+        	session.setAttribute("user", 1);
         }
         return resultList;
     }
