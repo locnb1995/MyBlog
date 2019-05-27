@@ -2,6 +2,7 @@ package baoloc.hus.server.controller;
 
 import baoloc.hus.server.entity.Member;
 import baoloc.hus.server.entity.Post;
+import baoloc.hus.server.entity.PostType;
 import baoloc.hus.server.responsitory.MemberResponsitory;
 import baoloc.hus.server.responsitory.PostResponsitory;
 import baoloc.hus.server.responsitory.PostTypeResponsitory;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,9 +54,17 @@ public class MainController {
     }
 
     @GetMapping("/PostDetail/{id}")
-    public Optional<Post> getPostById(@PathVariable String id){
+    public ArrayList<Post> getPostById(@PathVariable String id){
         Long post_id = Long.parseLong(id);
-        return postResponsitory.findById(post_id);
+        ArrayList<Post> result = new ArrayList<Post>();
+        if(!postResponsitory.existsById(post_id)) {
+        	return result;
+        }
+        Post post = postResponsitory.findById(post_id).get();
+        post.setView_total(post.getView_total() + 1);
+        postResponsitory.save(post);
+        result.add(post);
+        return result;
     }
     
     @GetMapping("/relatedPost/{id}")
@@ -74,17 +84,33 @@ public class MainController {
         return relatedpost;
     }
     
-    @PutMapping("/viewDetailPost/{id}")
-    public void updateViewOfPost(@PathVariable String id) {
-    	Long post_id = Long.parseLong(id);
-    	if(!postResponsitory.existsById(post_id)) {
-    		return;
-    	}
-    	Optional<Post> post = postResponsitory.findById(post_id);
-    	Post post_updated = post.get();
-    	post_updated.setView_total(post_updated.getView_total() + 1);
-    	postResponsitory.save(post_updated);
+    @GetMapping("/getAllPostType")
+    public List<PostType> getAllPostType(){
+    	return postTypeResponsitory.findAll();
     }
+    
+    @GetMapping("/getPostByTypeId/{id}")
+    public List<Post> getPostByTypeId(@PathVariable String id){
+    	Long type_id = Long.parseLong(id);
+    	ArrayList<Post> result = new ArrayList<Post>();
+    	if(!postTypeResponsitory.existsById(type_id)) {
+    		return result;
+    	}
+    	for(Post post : postResponsitory.findAll()) {
+    		if(post.getPostType().getId() == type_id) {
+    			result.add(post);
+    		}
+    	}
+        return result;
+    }
+    
+    @GetMapping("/getPostByView")
+    public List<Post> getPostByView(){
+    	List<Post> result = postResponsitory.findAll();
+    	Collections.sort(result, new ComparatorPostByView());
+        return result;
+    }
+    
     
     @GetMapping("/checkLoginStatus")
     public ArrayList<Boolean> checkLoginStatus(HttpSession session){
