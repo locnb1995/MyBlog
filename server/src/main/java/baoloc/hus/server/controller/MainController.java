@@ -71,15 +71,17 @@ public class MainController {
     public List<Post> getRelatedPostById(@PathVariable String id){
     	Long post_id = Long.parseLong(id);
     	List<Post> relatedpost = new ArrayList<Post>();
-    	if(postResponsitory.existsById(post_id)) {
-    		Optional<Post> post = postResponsitory.findById(post_id);
-    		Long type_id = post.get().getPostType().getId();
-    		String sql = "SELECT p.* FROM post as p INNER JOIN post_type as pt ON p.type_id = pt.id WHERE pt.id = " + type_id + 
-    				" AND p.id != " + id;
-            Query query = entityManager.createNativeQuery(sql);
-            @SuppressWarnings("unchecked")
-			List<Post> resultList = query.getResultList();
-			relatedpost = resultList;
+    	if(!postResponsitory.existsById(post_id)) {
+    		return relatedpost;
+    	}
+    	List<Post> allPost = postResponsitory.findAll();
+    	for(Post post : allPost) {
+    		if(post.getId() == postResponsitory.findById(post_id).get().getId()) {
+    			continue;
+    		}
+    		if(post.getPostType().getId() == postResponsitory.findById(post_id).get().getPostType().getId()) {
+    			relatedpost.add(post);
+    		}
     	}
         return relatedpost;
     }
