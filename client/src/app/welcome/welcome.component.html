@@ -1,0 +1,16 @@
+<div class="container">
+  <app-header></app-header>
+  <ng-container *ngIf="page == 'post'">
+    <app-post [Post]='ListPost'></app-post>
+  </ng-container>
+  <ng-container *ngIf="page == 'post-detail'">
+    <app-post-detail></app-post-detail>
+  </ng-container>
+  <ng-container *ngIf="page == 'post-type'">
+    <app-post [Post]='ListPost'></app-post>
+  </ng-container>
+  <ng-container *ngIf="page == 'post-hots'">
+    <app-post [Post]="ListPost"></app-post>
+  </ng-container>
+  <app-footer></app-footer>
+</div>

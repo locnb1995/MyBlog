@@ -1,0 +1,8 @@
+.jumbotron{
+    background: url('https://raw.githubusercontent.com/locnb1995/EmployeeManager/master/src/main/resources/static/img/Banner.jpg') no-repeat center center;
+    -webkit-background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -o-background-size: 100% 100%;
+    background-size: 100% 100%;
+    min-height: 300px;
+}
