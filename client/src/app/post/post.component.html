@@ -1,0 +1,53 @@
+<ng-container *ngIf="!isAdmin">
+  <div *ngFor="let item of Post">
+    <div class="container post">
+      <div class="row">
+        <div class="col col-lg-3">
+          <img src="../../assets/img/image4.jpg" alt="Smiley face" height="250" width="250">
+        </div>
+        <div class="col">
+          <div>
+            <h4>{{ item.title }}</h4>
+          </div>
+          <div>
+            <p>Author : {{ item.member.username }} , Date Submitted : {{ item.date_submit }} , View Total : {{ item.view_total }}</p>
+            <p>{{ item.description }}</p>
+          </div>
+          <div>
+              <a (click)="getPostId(item.id)" class="btn btn-info">View Detail</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isAdmin">
+  <h2>Your Post</h2>
+  <p></p>          
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Date Submit</th>
+        <th>ViewTotal</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of Post">
+        <td>{{ item.id }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.date_submit }}</td>
+        <td>{{ item.view_total }}</td>
+        <td><button type="button" class="btn btn-success" (click)="getPostId(item.id)">Edit</button></td>
+        <td><button type="button" class="btn btn-danger">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <button type="button" class="btn btn-primary">Add Post</button>
+</ng-container>

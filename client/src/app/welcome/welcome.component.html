@@ -1,0 +1,11 @@
+<div class="container">
+  <app-header></app-header>
+  <app-menu (redirect)="redirectPage($event)" [isAdmin]="false"></app-menu>
+  <ng-container *ngIf="!detailPage">
+    <app-post [Post]='ListPost' (PostDetailID)="getPostDetailId($event)"  [isAdmin]="false"></app-post>
+  </ng-container>
+  <ng-container *ngIf="detailPage">
+    <app-post-detail [PostDetail]="PostDetail" [RelatedPost]="RelatedPost" (RelatedPostID)="getRelatedPostID($event)"></app-post-detail>
+  </ng-container>
+  <app-footer></app-footer>
+</div>
