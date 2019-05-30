@@ -10,7 +10,6 @@ export class PostDetailComponent implements OnInit {
   @Input() PostDetail: Post;
   @Input() RelatedPost: Array<Post>;
   @Output() RelatedPostID = new EventEmitter<number>();
-  @Input() isAdmin: boolean;
 
   constructor() { }
   ngOnInit() {}

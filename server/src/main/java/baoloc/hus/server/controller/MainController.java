@@ -3,6 +3,7 @@ package baoloc.hus.server.controller;
 import baoloc.hus.server.entity.Member;
 import baoloc.hus.server.entity.Post;
 import baoloc.hus.server.entity.PostType;
+import baoloc.hus.server.entity.Role;
 import baoloc.hus.server.responsitory.MemberResponsitory;
 import baoloc.hus.server.responsitory.PostResponsitory;
 import baoloc.hus.server.responsitory.PostTypeResponsitory;
@@ -89,6 +90,21 @@ public class MainController {
     @GetMapping("/getAllPostType")
     public List<PostType> getAllPostType(){
     	return postTypeResponsitory.findAll();
+    }
+    
+    @GetMapping("/getAllMember")
+    public List<Member> getAllMember(){
+    	return memberResponsitory.findAll();
+    }
+    
+    @GetMapping("/getUserRole")
+    public List<Role> getUserRole(){
+    	return roleResponsitory.findAll();
+    }
+    
+    @PostMapping("/addPost")
+    public void addPost(@RequestBody Post post){
+    	postResponsitory.save(post);
     }
     
     @GetMapping("/getPostByTypeId/{id}")

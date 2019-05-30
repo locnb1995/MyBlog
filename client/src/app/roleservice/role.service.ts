@@ -4,11 +4,11 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class PostTypeService {
+export class RoleService {
 
   constructor(private http: HttpClient) { }
 
-  getAllPostType(urlConfig) {
-    return this.http.get(urlConfig + '/getAllPostType');
+  getAllRole(urlConfig) {
+    return this.http.get(urlConfig + '/getUserRole');
   }
 }

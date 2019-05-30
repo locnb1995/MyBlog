@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -10,10 +11,11 @@ import { PostDetailComponent } from './post-detail/post-detail.component';
 import { AppRoutingModule } from './app-routing.module';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { PostService } from './postservice/post.service';
-import { HttpModule } from '@angular/http';
 import { PostPipe } from './post.pipe';
 import { MenuComponent } from './menu/menu.component';
 import { AdminComponent } from './admin/admin.component';
+import { PostFormComponent } from './post-form/post-form.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,12 +28,14 @@ import { AdminComponent } from './admin/admin.component';
     PagenotfoundComponent,
     PostPipe,
     MenuComponent,
-    AdminComponent
+    AdminComponent,
+    PostFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [PostService],
   bootstrap: [AppComponent]

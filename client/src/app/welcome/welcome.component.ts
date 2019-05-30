@@ -20,37 +20,37 @@ export class WelcomeComponent implements OnInit {
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.postService.getAllPost(this.configApp.url).subscribe((data) => {
+    this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
       this.ListPost = data;
     });
   }
   getPostDetailId(id) {
     this.detailPage = true;
-    this.postService.getPostDetail(this.configApp.url , id).subscribe((data) => {
+    this.postService.getPostDetail(this.configApp.url , id).subscribe((data: Array<Post>) => {
       this.PostDetail = data[0];
     });
-    this.postService.getRelatedPost(this.configApp.url , id).subscribe((data) => {
+    this.postService.getRelatedPost(this.configApp.url , id).subscribe((data: Array<Post>) => {
       this.RelatedPost = data;
     });
   }
   getRelatedPostID(id) {
-    this.postService.getPostDetail(this.configApp.url , id).subscribe((data) => {
+    this.postService.getPostDetail(this.configApp.url , id).subscribe((data: Array<Post>) => {
       this.PostDetail = data[0];
     });
-    this.postService.getRelatedPost(this.configApp.url , id).subscribe((data) => {
+    this.postService.getRelatedPost(this.configApp.url , id).subscribe((data: Array<Post>) => {
       this.RelatedPost = data;
     });
   }
   redirectPage(page: [string, number]) {
     this.detailPage = false;
     if (page[0] === 'welcome') {
-      this.postService.getAllPost(this.configApp.url).subscribe((data) => {
+      this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
         this.ListPost = data;
       });
     }
     if (page[0] === 'postByType') {
       this.ListPost = [];
-      this.postService.getAllPost(this.configApp.url).subscribe((data) => {
+      this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
         for (const i of data) {
           if (i.postType.id === page[1]) {
             this.ListPost.push(i);
@@ -59,7 +59,7 @@ export class WelcomeComponent implements OnInit {
       });
     }
     if (page[0] === 'hots') {
-      this.postService.getAllPost(this.configApp.url).subscribe((data) => {
+      this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
         data.sort((obj1, obj2) => {
           if (obj1.view_total > obj2.view_total) {
             return -1;

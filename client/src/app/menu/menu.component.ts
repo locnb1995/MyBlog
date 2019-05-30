@@ -17,7 +17,7 @@ export class MenuComponent implements OnInit {
   constructor(private postTypeService: PostTypeService) { }
 
   ngOnInit() {
-    this.postTypeService.getAllPostType(this.configApp.url).subscribe((data) => {
+    this.postTypeService.getAllPostType(this.configApp.url).subscribe((data: Array<PostType>) => {
       this.postType = data;
     });
   }

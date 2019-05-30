@@ -10,12 +10,21 @@ export class PostComponent implements OnInit {
   @Input() Post: Array<Post>;
   @Output() PostDetailID = new EventEmitter<number>();
   @Input() isAdmin: boolean;
+  @Output() EventPost = new EventEmitter<[string, number]>();
   constructor() { }
 
   ngOnInit() {}
 
   getPostId(id) {
     this.PostDetailID.emit(id);
+  }
+
+  getPostIdEdit(id: number) {
+    this.EventPost.emit(['edit', id]);
+  }
+
+  getAddPostForm(){
+    this.EventPost.emit(['add', 0]);
   }
 
 }

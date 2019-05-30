@@ -13,8 +13,4 @@ export class Post {
     // tslint:disable-next-line:variable-name
     view_total: number;
     image: string;
-
-    constructor() {
-        this.id = 1;
-    }
 }

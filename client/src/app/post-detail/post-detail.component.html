@@ -1,62 +1,21 @@
-<ng-container *ngIf="!isAdmin">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-9" style="border: 1px solid black;">
-        <h2>{{ PostDetail?.title }}</h2>
-        <p>Author : {{ PostDetail?.member.username }} , Date Submitted : {{ PostDetail?.date_submit }} , View_Total : {{ PostDetail?.view_total }}</p>
-        <p>{{ PostDetail?.description }}</p>
-        <img src="../../assets/img/image4.jpg" alt="Smiley face" height="250" width="400">
-        <p></p>
-        <p>{{ PostDetail?.detail }}</p>
-      </div>
-      <div class="col">
-        <h5>Related News</h5>
-        <ul *ngIf="RelatedPost">
-          <li *ngFor="let item of RelatedPost">
-            <a (click)="getRelatedPostId(item.id)">{{ item.title }}</a>
-          </li>
-        </ul>
-      </div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9" style="border: 1px solid black;">
+      <h2>{{ PostDetail?.title }}</h2>
+      <p>Author : {{ PostDetail?.member.username }} , Date Submitted : {{ PostDetail?.date_submit }} , View_Total :
+        {{ PostDetail?.view_total }}</p>
+      <p>{{ PostDetail?.description }}</p>
+      <img src="../../assets/img/image4.jpg" alt="Smiley face" height="250" width="400">
+      <p></p>
+      <p>{{ PostDetail?.detail }}</p>
+    </div>
+    <div class="col">
+      <h5>Related News</h5>
+      <ul *ngIf="RelatedPost">
+        <li *ngFor="let item of RelatedPost">
+          <a (click)="getRelatedPostId(item.id)">{{ item.title }}</a>
+        </li>
+      </ul>
     </div>
   </div>
-</ng-container>
-
-<ng-container *ngIf="isAdmin">
-    <h1>Post</h1>
-    <p></p>
-    <form action="">
-      <div class="form-group">
-        <label>ID</label>
-        <input type="number" class="form-control" value="{{ PostDetail?.id }}" readonly>
-      </div>
-      <div class="form-group">
-        <label>Title</label>
-        <input type="text" class="form-control" value="{{ PostDetail?.title }}">
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea class="form-control">{{ PostDetail?.description }}"</textarea>
-      </div>
-      <div class="form-group">
-        <label>Detail</label>
-        <textarea class="form-control" style="height: 300px;">{{ PostDetail?.detail }}"</textarea>
-      </div>
-      <div class="form-group">
-        <label>Type</label>
-        <input type="text" class="form-control" readonly value="{{ PostDetail?.postType.name }}">
-      </div>
-      <div class="form-group">
-        <label>Author</label>
-        <input type="text" class="form-control" readonly value="{{ PostDetail?.member.username }}">
-      </div>
-      <div class="form-group">
-        <label>Date Submit</label>
-        <input type="text" class="form-control" readonly value="{{ PostDetail?.date_submit }}">
-      </div>
-      <div class="form-group">
-        <label>View Total</label>
-        <input type="number" class="form-control" readonly value="{{ PostDetail?.view_total }}">
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</ng-container>
+</div>
