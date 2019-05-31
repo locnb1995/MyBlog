@@ -61,9 +61,9 @@ export class AdminComponent implements OnInit {
   }
 
   backToManager() {
-    this.detailPage = false;
-    this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
-      this.ListPost = data;
+    this.postService.getAllPost(this.configApp.url).toPromise().then((result: Array<Post>) => {
+      this.ListPost = result;
+      this.detailPage = false;
     });
   }
 

@@ -11,6 +11,7 @@ import baoloc.hus.server.responsitory.RoleResponsitory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -105,6 +106,17 @@ public class MainController {
     @PostMapping("/addPost")
     public void addPost(@RequestBody Post post){
     	postResponsitory.save(post);
+    }
+    
+    @PutMapping("/editPost")
+    public void editPost(@RequestBody Post post){
+    	postResponsitory.save(post);
+    }
+    
+    @DeleteMapping("/deletePost/{id}")
+    public void deletePost(@PathVariable String id){
+    	Long post_id = Long.parseLong(id);
+    	postResponsitory.deleteById(post_id);;
     }
     
     @GetMapping("/getPostByTypeId/{id}")

@@ -1,41 +1,44 @@
 <ng-container *ngIf="eventEditPost">
   <h1>Post</h1>
   <p></p>
-  <form action="">
+  <form (ngSubmit)="onEditPost(editPostForm);" #editPostForm="ngForm">
     <div class="form-group">
       <label>ID</label>
-      <input type="number" class="form-control" value="{{ PostDetail?.id }}" readonly>
+      <input type="number" class="form-control" [(ngModel)]="PostDetail.id" readonly name="id" required>
     </div>
     <div class="form-group">
       <label>Title</label>
-      <input type="text" class="form-control" value="{{ PostDetail?.title }}">
+      <input type="text" class="form-control" [(ngModel)]="PostDetail.title" name="title" required>
     </div>
     <div class="form-group">
       <label>Description</label>
-      <textarea class="form-control">{{ PostDetail?.description }}"</textarea>
+      <textarea class="form-control" [(ngModel)]="PostDetail.description" name="description" required></textarea>
     </div>
     <div class="form-group">
       <label>Detail</label>
-      <textarea class="form-control" style="height: 300px;">{{ PostDetail?.detail }}"</textarea>
+      <textarea class="form-control" [(ngModel)]="PostDetail.detail" style="height: 300px;" name="detail" required></textarea>
     </div>
     <div class="form-group">
       <label>Type</label>
-      <input type="text" class="form-control" readonly value="{{ PostDetail?.postType.name }}">
+      <input type="text" class="form-control" readonly [(ngModel)]="PostDetail.postType.name" name="type" required>
     </div>
     <div class="form-group">
       <label>Author</label>
-      <input type="text" class="form-control" readonly value="{{ PostDetail?.member.username }}">
+      <input type="text" class="form-control" readonly [(ngModel)]="PostDetail.member.username" name="author" required>
     </div>
     <div class="form-group">
       <label>Date Submit</label>
-      <input type="text" class="form-control" readonly value="{{ PostDetail?.date_submit }}">
+      <input type="text" class="form-control" readonly [(ngModel)]="PostDetail.date_submit" name="date_submit" required>
     </div>
     <div class="form-group">
       <label>View Total</label>
-      <input type="number" class="form-control" readonly value="{{ PostDetail?.view_total }}">
+      <input type="number" class="form-control" readonly [(ngModel)]="PostDetail.view_total" name="view_total" [(ngModel)]="postHandling.view_total" required>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+  <p></p>
+  <p></p>
+  <button type="button" class="btn btn-info" (click)="BackToManager()">Back to Manager</button>
 </ng-container>
 <ng-container *ngIf="!eventEditPost">
   <h1>Post</h1>
@@ -64,4 +67,7 @@
     </div>
     <button type="submit" class="btn btn-primary" [disabled]="postForm.invalid">Submit</button>
   </form>
+  <p></p>
+  <p></p>
+  <button type="button" class="btn btn-info" (click)="BackToManager()">Back to Manager</button>
 </ng-container>

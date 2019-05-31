@@ -20,6 +20,7 @@ export class PostFormComponent implements OnInit {
   listPostType: Array<PostType>;
   configApp = new ConfigApp();
   postHandling = new Post();
+  listMember: Array<Member>;
   member: Member;
   type: PostType;
   constructor(private postTypeService: PostTypeService,
@@ -31,8 +32,8 @@ export class PostFormComponent implements OnInit {
     this.postTypeService.getAllPostType(this.configApp.url).subscribe((data: Array<PostType>) => {
       this.listPostType = data;
     });
-    this.memberService.getAllMember(this.configApp.url).toPromise().then(result => {
-      this.member = result[0];
+    this.memberService.getAllMember(this.configApp.url).toPromise().then((result: Array<Member>) => {
+      this.listMember = result;
     });
   }
 
@@ -42,9 +43,31 @@ export class PostFormComponent implements OnInit {
     this.postHandling.description = post.value.description;
     this.postHandling.detail = post.value.detail;
     this.postHandling.postType = this.type;
+    this.postHandling.member = this.listMember[0];
+    this.postHandling.image = '';
+    this.postService.createPost(this.configApp.url, this.postHandling).subscribe((data) => {
+      this.redirectToManager.emit();
+    });
+  }
+
+  onEditPost(post) {
+    this.type = this.listPostType.find(x => x.name === post.value.type);
+    this.member = this.listMember.find(x => x.username === post.value.author);
+    this.postHandling.id = post.value.id;
+    this.postHandling.title = post.value.title;
+    this.postHandling.description = post.value.description;
+    this.postHandling.detail = post.value.detail;
+    this.postHandling.postType = this.type;
+    this.postHandling.date_submit = post.value.date_submit;
+    this.postHandling.view_total = post.value.view_total;
     this.postHandling.member = this.member;
     this.postHandling.image = '';
-    this.postService.createPost(this.configApp.url, this.postHandling).subscribe((data) => {});
+    this.postService.editPost(this.configApp.url, this.postHandling).subscribe((data) => {
+      this.redirectToManager.emit();
+    });
+  }
+
+  BackToManager() {
     this.redirectToManager.emit();
   }
 

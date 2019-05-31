@@ -1,5 +1,7 @@
 import { Component, OnInit, Input , Output , EventEmitter } from '@angular/core';
 import { Post } from '../model/Post';
+import { ConfigApp } from '../model/ConfigApp';
+import { PostService } from '../postservice/post.service';
 
 @Component({
   selector: 'app-post',
@@ -11,7 +13,10 @@ export class PostComponent implements OnInit {
   @Output() PostDetailID = new EventEmitter<number>();
   @Input() isAdmin: boolean;
   @Output() EventPost = new EventEmitter<[string, number]>();
-  constructor() { }
+  @Output() backToManagerPost = new EventEmitter();
+  configApp = new ConfigApp();
+
+  constructor(private postService: PostService) { }
 
   ngOnInit() {}
 
@@ -23,8 +28,14 @@ export class PostComponent implements OnInit {
     this.EventPost.emit(['edit', id]);
   }
 
-  getAddPostForm(){
+  getAddPostForm() {
     this.EventPost.emit(['add', 0]);
+  }
+
+  deletePostById(id) {
+    this.postService.deletePost(this.configApp.url, id).subscribe((data) => {
+      this.backToManagerPost.emit();
+    });
   }
 
 }

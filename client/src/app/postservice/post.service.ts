@@ -34,4 +34,16 @@ export class PostService {
     return this.http.post(urlConfig + '/addPost', value, httpOptions);
   }
 
+  editPost(urlConfig, value: Post) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.put(urlConfig + '/editPost', value, httpOptions);
+  }
+
+  deletePost(urlConfig, Id) {
+    return this.http.delete(urlConfig + '/deletePost/' + Id);
+  }
 }
