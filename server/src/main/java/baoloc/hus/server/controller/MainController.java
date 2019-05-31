@@ -4,6 +4,7 @@ import baoloc.hus.server.entity.Member;
 import baoloc.hus.server.entity.Post;
 import baoloc.hus.server.entity.PostType;
 import baoloc.hus.server.entity.Role;
+import baoloc.hus.server.login.LoginService;
 import baoloc.hus.server.responsitory.MemberResponsitory;
 import baoloc.hus.server.responsitory.PostResponsitory;
 import baoloc.hus.server.responsitory.PostTypeResponsitory;
@@ -20,13 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.servlet.http.HttpSession;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -43,8 +41,6 @@ public class MainController {
     @Autowired
     private PostTypeResponsitory postTypeResponsitory;
     
-    @Autowired
-    private EntityManager entityManager;
     
     private Sort orderByIdDesc() {
     	return new Sort(Sort.Direction.DESC, "id");
@@ -116,7 +112,7 @@ public class MainController {
     @DeleteMapping("/deletePost/{id}")
     public void deletePost(@PathVariable String id){
     	Long post_id = Long.parseLong(id);
-    	postResponsitory.deleteById(post_id);;
+    	postResponsitory.deleteById(post_id);
     }
     
     @GetMapping("/getPostByTypeId/{id}")
@@ -141,28 +137,27 @@ public class MainController {
         return result;
     }
     
-    
     @GetMapping("/checkLoginStatus")
-    public ArrayList<Boolean> checkLoginStatus(HttpSession session){
-    	ArrayList<Boolean> checkLogin = new ArrayList<Boolean>();
-    	checkLogin.add(false);
-    	if(session.getAttribute("user") == null) {
-    		return checkLogin;
-    	}
-    	checkLogin.set(0, true);
-		return checkLogin;
+    public List<Boolean> checkLogin(){
+    	List<Boolean> result = new ArrayList<Boolean>();
+    	return result;
     }
     
-    @PostMapping("/MemberInfo")
-    public List<Member> checkMemberExist(@RequestBody Member member , HttpSession session){
-    	String sql = "SELECT * FROM members WHERE username = '"+member.getUsername()+"' AND password='"+member.getPassword()+"'";
-        Query query = entityManager.createNativeQuery(sql);
-        @SuppressWarnings("unchecked")
-		List<Member> resultList = query.getResultList();
-        if(!resultList.isEmpty()) {
-        	session.setAttribute("user", 1);
-        }
-        return resultList;
+    
+    @PostMapping("/checkUserInfo")
+    public List<String> checkMemberExist(@RequestBody Member memberInfo){
+    	List<String> result = new ArrayList<String>();
+    	List<Member> listMember = memberResponsitory.findAll();
+    	for(Member member: listMember) {
+    		if(member.getUsername().equals(memberInfo.getUsername()) && member.getPassword().equals(memberInfo.getPassword())) {
+    			String member_id = Long.toString(member.getId());
+    			String token = Base64.getEncoder().encodeToString(member_id.getBytes());
+    			LoginService.listUserLogin.put(member.getId(), token);
+    			result.add(token);
+    			return result;
+    		}
+    	}
+    	return result;
     }
     
 }

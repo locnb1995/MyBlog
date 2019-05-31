@@ -16,6 +16,7 @@ import { MenuComponent } from './menu/menu.component';
 import { AdminComponent } from './admin/admin.component';
 import { PostFormComponent } from './post-form/post-form.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { HttpClientModule } from '@angular/common/http';
     PostPipe,
     MenuComponent,
     AdminComponent,
-    PostFormComponent
+    PostFormComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
