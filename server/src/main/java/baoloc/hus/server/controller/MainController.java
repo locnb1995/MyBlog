@@ -147,15 +147,32 @@ public class MainController {
     @PostMapping("/checkUserInfo")
     public List<String> checkMemberExist(@RequestBody Member memberInfo){
     	List<String> result = new ArrayList<String>();
-    	List<Member> listMember = memberResponsitory.findAll();
-    	for(Member member: listMember) {
-    		if(member.getUsername().equals(memberInfo.getUsername()) && member.getPassword().equals(memberInfo.getPassword())) {
-    			String member_id = Long.toString(member.getId());
-    			String token = Base64.getEncoder().encodeToString(member_id.getBytes());
-    			LoginService.listUserLogin.put(member.getId(), token);
-    			result.add(token);
-    			return result;
-    		}
+    	String invalid = "Invalid Username or Password";
+//    	result.add(invalid);
+//    	if(LoginService.listUserLogin.containsKey(memberInfo.getId())) {
+//    		result.add("Your account is logged in at 1 other locations");
+//    		result.remove(invalid);
+//    		return result;
+//    	}
+//    	List<Member> listMember = memberResponsitory.findAll();
+//    	for(Member member: listMember) {
+//    		if(member.getUsername().equals(memberInfo.getUsername()) && member.getPassword().equals(memberInfo.getPassword())) {
+//    			String member_id = Long.toString(member.getId());
+//    			String token = Base64.getEncoder().encodeToString(member_id.getBytes());
+//    			LoginService.listUserLogin.put(member.getId(), token);
+//    			result.add("Login Success");
+//    			result.remove(invalid);
+//    			return result;
+//    		}
+//    	}
+    	return result;
+    }
+    
+    @GetMapping("/getUserToken")
+    public List<String> getUserToken(@RequestBody Member memberInfo){
+    	List<String> result = new ArrayList<String>();
+    	if(memberInfo == null) {
+    		return result;
     	}
     	return result;
     }
