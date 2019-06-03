@@ -24,34 +24,42 @@
 
 <ng-container *ngIf="isAdmin">
   <h2>Your Post</h2>
-  <p></p>          
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Author</th>
-        <th>Post Type</th>
-        <th>Date Submit</th>
-        <th>ViewTotal</th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of Post">
-        <td>{{ item.id }}</td>
-        <td>{{ item.title }}</td>
-        <td>{{ item.description }}</td>
-        <td>{{ item.member.username }}</td>
-        <td>{{ item.postType.name }}</td>
-        <td>{{ item.date_submit }}</td>
-        <td>{{ item.view_total }}</td>
-        <td><button type="button" class="btn btn-success" (click)="getPostIdEdit(item.id)">Edit</button></td>
-        <td><button type="button" class="btn btn-danger" (click)="deletePostById(item.id)">Delete</button></td>
-      </tr>
-    </tbody>
-  </table>
+  <p></p>        
+  <ng-container *ngIf="Post.length !== 0">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Author</th>
+          <th>Post Type</th>
+          <th>Date Submit</th>
+          <th>ViewTotal</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of Post">
+          <td>{{ item.id }}</td>
+          <td>{{ item.title }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.member.username }}</td>
+          <td>{{ item.postType.name }}</td>
+          <td>{{ item.date_submit }}</td>
+          <td>{{ item.view_total }}</td>
+          <td><button type="button" class="btn btn-success" (click)="getPostIdEdit(item.id)">Edit</button></td>
+          <td><button type="button" class="btn btn-danger" (click)="deletePostById(item.id)">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-container *ngIf="Post.length === 0">
+    <div class="border" style="height: 250px;">
+      <h1>You dont have any post in this category</h1>
+    </div>
+    <p></p>
+  </ng-container>
   <button type="button" class="btn btn-primary" (click)="getAddPostForm()">Add Post</button>
 </ng-container>

@@ -17,7 +17,10 @@ export class LoginComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-
+    if (localStorage.getItem('key') !== null) {
+      this.router.navigate(['/admin']);
+      return;
+    }
   }
 
   onCheckLogin(userInfo) {
@@ -33,8 +36,8 @@ export class LoginComponent implements OnInit {
         return;
       }
       if (data[0] === 'Login Success') {
-        this.LoginNotification = 'Login Success';
-        return;
+        localStorage.setItem('key' , data[1]);
+        this.router.navigate(['/admin']);
       }
     });
   }

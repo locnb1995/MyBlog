@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -40,7 +42,6 @@ public class MainController {
 
     @Autowired
     private PostTypeResponsitory postTypeResponsitory;
-    
     
     private Sort orderByIdDesc() {
     	return new Sort(Sort.Direction.DESC, "id");
@@ -137,44 +138,71 @@ public class MainController {
         return result;
     }
     
-    @GetMapping("/checkLoginStatus")
-    public List<Boolean> checkLogin(){
-    	List<Boolean> result = new ArrayList<Boolean>();
-    	return result;
-    }
-    
-    
     @PostMapping("/checkUserInfo")
     public List<String> checkMemberExist(@RequestBody Member memberInfo){
     	List<String> result = new ArrayList<String>();
     	String invalid = "Invalid Username or Password";
-//    	result.add(invalid);
-//    	if(LoginService.listUserLogin.containsKey(memberInfo.getId())) {
-//    		result.add("Your account is logged in at 1 other locations");
-//    		result.remove(invalid);
-//    		return result;
-//    	}
-//    	List<Member> listMember = memberResponsitory.findAll();
-//    	for(Member member: listMember) {
-//    		if(member.getUsername().equals(memberInfo.getUsername()) && member.getPassword().equals(memberInfo.getPassword())) {
-//    			String member_id = Long.toString(member.getId());
-//    			String token = Base64.getEncoder().encodeToString(member_id.getBytes());
-//    			LoginService.listUserLogin.put(member.getId(), token);
-//    			result.add("Login Success");
-//    			result.remove(invalid);
-//    			return result;
-//    		}
-//    	}
+    	result.add(invalid);
+    	List<Member> listMember = memberResponsitory.findAll();
+    	for(Member member: listMember) {
+    		if(member.getUsername().equals(memberInfo.getUsername()) && member.getPassword().equals(memberInfo.getPassword())) {
+    			if(LoginService.checkUserLogin(member)) {
+    	    		result.add("Your account is logged in at 1 other locations");
+    	    		result.remove(invalid);
+    	    		return result;
+    	    	}
+    			result.remove(invalid);
+    			result.add("Login Success");
+    			result.add(LoginService.addUserLogin(member));
+    			return result;
+    		}
+    	}
     	return result;
     }
     
-    @GetMapping("/getUserToken")
-    public List<String> getUserToken(@RequestBody Member memberInfo){
-    	List<String> result = new ArrayList<String>();
-    	if(memberInfo == null) {
+    @GetMapping("/getPostByUser")
+    public List<Post> getPostByUser(@RequestHeader(value="Authorization") String token){
+    	List<Post> result = new ArrayList<Post>();
+    	if(token.equals("")) {
     		return result;
     	}
+    	Long user_id = LoginService.getUserByToken(token);
+    	if(user_id == 0L) {
+    		return result;
+    	}
+    	List<Post> allPost = postResponsitory.findAll(orderByIdDesc());
+    	if(user_id == 1L) {
+    		return allPost;
+    	}
+    	for(Post post : allPost) {
+    		if(post.getMember().getId() == user_id) {
+    			result.add(post);
+    		}
+    	}
     	return result;
+    }
+    
+    @GetMapping("/getUserInfo")
+    public List<Member> getUserInfo(@RequestHeader(value="Authorization") String token) {
+    	List<Member> result = new ArrayList<Member>();
+    	if(token.equals("")) {
+    		return result;
+    	}
+    	Long user_id = LoginService.getUserByToken(token);
+    	if(user_id == 0L) {
+    		return result;
+    	}
+    	Optional<Member> member = memberResponsitory.findById(user_id);
+    	result.add(member.get());
+    	return result;
+    }
+    
+    @GetMapping("/logout")
+    public void logout(@RequestHeader(value="Authorization") String token) {
+    	Long user_id = LoginService.getUserByToken(token);
+    	LoginService.removeUserLogin(user_id);
+    	HashMap<Long, String> list = LoginService.listUser();
+    	list = new HashMap<Long, String>();
     }
     
 }

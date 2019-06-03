@@ -17,6 +17,20 @@ export class PostService {
     return this.http.get(urlConfig + '/listPost');
   }
 
+  getPostByUser(urlConfig) {
+    let token = '';
+    if (localStorage.getItem('key') !== null) {
+      token = localStorage.getItem('key');
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization : token
+      })
+    };
+    return this.http.get(urlConfig + '/getPostByUser', httpOptions);
+  }
+
   getPostDetail(urlConfig, Id) {
     return this.http.get(urlConfig + '/PostDetail/' + Id);
   }

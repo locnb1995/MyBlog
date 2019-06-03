@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Post } from '../model/Post';
 import { PostService } from '../postservice/post.service';
 import { ConfigApp } from '../model/ConfigApp';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -10,28 +11,36 @@ import { ConfigApp } from '../model/ConfigApp';
 })
 export class AdminComponent implements OnInit {
   detailPage = false;
-  ListPost: Array<Post>;
+  ListPost = new Array<Post>();
   configApp = new ConfigApp();
   PostDetail: Post;
   showEditPost = false;
-  constructor(private postService: PostService) { }
+  constructor(private postService: PostService,
+              private router: Router) { }
 
   ngOnInit() {
-    this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
+    if (localStorage.getItem('key') === null) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.postService.getPostByUser(this.configApp.url).subscribe((data: Array<Post>) => {
       this.ListPost = data;
     });
+    // this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
+    //   this.ListPost = data;
+    // });
   }
 
   redirectPage(page: [string, number]) {
     this.detailPage = false;
     if (page[0] === 'welcome') {
-      this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
+      this.postService.getPostByUser(this.configApp.url).subscribe((data: Array<Post>) => {
         this.ListPost = data;
       });
     }
     if (page[0] === 'postByType') {
       this.ListPost = [];
-      this.postService.getAllPost(this.configApp.url).subscribe((data: Array<Post>) => {
+      this.postService.getPostByUser(this.configApp.url).subscribe((data: Array<Post>) => {
         for (const i of data) {
           if (i.postType.id === page[1]) {
             this.ListPost.push(i);
@@ -61,7 +70,7 @@ export class AdminComponent implements OnInit {
   }
 
   backToManager() {
-    this.postService.getAllPost(this.configApp.url).toPromise().then((result: Array<Post>) => {
+    this.postService.getPostByUser(this.configApp.url).toPromise().then((result: Array<Post>) => {
       this.ListPost = result;
       this.detailPage = false;
     });
